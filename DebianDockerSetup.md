@@ -8,14 +8,16 @@ sudo apt install apt-transport-https ca-certificates curl software-properties-co
 ```
 ### Import docker repository GPG key
 ```
-curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 ```
-The above command should return `OK` if successful.
+The above command will not return anything if successful.
 
 ### Add docker source to /etc/apt/source.list.d/docker.list
-`$(lsb_release -cs)` should return `buster` or `stretch` contingent on your Debian version, anything else hasn't been tested. 
+`$(lsb_release -cs)` should return `buster`, `stretch`, `bookworm`, or `trixie` contingent on your Debian version, anything else hasn't been tested.
+* Ignore `No LSB modules are available.` if observed when testing release this output will not affect the output when using for the apt list.
+* Make sure the signed-by matches *Import docker repository GPG key* path.
 ```
-echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -sc) stable" | sudo tee /etc/apt/sources.list.d/docker.list
 ```
 ### Update sources and install docker-ce
 Update apt and install `docker-ce` and `docker-ce-cli`
@@ -29,11 +31,9 @@ sudo systemctl status docker
 ```
 If docker is running the above command should output something reminiscent to this:
 ```
-● docker.service - Docker Application Container Engine
-   Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
-   Active: active (running) since Sun 2020-10-11 12:06:22 CDT; 1min 33s ago
-     Docs: https://docs.docker.com
- Main PID: 26681 (dockerd)
+* docker.service - Docker Application Container Engine
+     Loaded: loaded (/lib/systemd/system/docker.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2025-10-07 03:39:43 UTC; 15min ago
 ...
 ```
 # Using docker without sudo
