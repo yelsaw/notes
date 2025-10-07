@@ -1,6 +1,6 @@
 
 # Docker Community Edition (CE) Installation on Debian
-Run commands as-is to install the latest version of `docker-ce` on Debian 10`buster`or Debian 9`stretch`
+Run commands as-is to install the latest version of `docker-ce` on Debian 10-13.
 ### Install prerequisites
 Install the packages required to add GPG key and docker repository:
 ```
